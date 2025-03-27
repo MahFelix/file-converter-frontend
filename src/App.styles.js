@@ -51,3 +51,28 @@ export const ResetButton = styled(Button)`
     }
   }
 `;
+
+export const FilePreview = styled.div`
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+
+  h3 {
+    margin-top: 0;
+    color: #333;
+  }
+`;
+
+export const PreviewContent = styled.pre`
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: monospace;
+`;

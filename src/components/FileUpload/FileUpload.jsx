@@ -16,10 +16,25 @@ export default function FileUpload({ onFileSelect }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
+      // Documentos
+      'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/vnd.oasis.opendocument.text': ['.odt'],
+      'application/rtf': ['.rtf'],
+      'text/plain': ['.txt'],
+      
+      // Planilhas
+      'application/vnd.ms-excel': ['.xls'],
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/vnd.oasis.opendocument.spreadsheet': ['.ods'],
       'text/csv': ['.csv'],
+      
+      // Apresentações
+      'application/vnd.ms-powerpoint': ['.ppt'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/vnd.oasis.opendocument.presentation': ['.odp'],
+      
+      // Outros
       'application/pdf': ['.pdf'],
     },
     maxFiles: 1,
@@ -43,7 +58,7 @@ export default function FileUpload({ onFileSelect }) {
         {isDragActive ? 'Solte o arquivo aqui' : 'Arraste e solte seu arquivo'}
       </S.DropzoneText>
       <S.DropzoneSubtext>
-        Formatos suportados: DOCX, XLSX, PPTX, CSV, PDF
+        Formatos suportados: DOC/DOCX, XLS/XLSX, PPT/PPTX, ODT/ODS/ODP, CSV, TXT, RTF, PDF
       </S.DropzoneSubtext>
     </S.Dropzone>
   );
