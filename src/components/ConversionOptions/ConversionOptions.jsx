@@ -1,6 +1,10 @@
 import React from 'react';
-import { Button, Grid, Typography, CircularProgress, Box } from '@mui/material';
+import { Button, Grid, Typography, CircularProgress, Box, useTheme, useMediaQuery } from '@mui/material';
+
 function ConversionOptions({ options = [], onConvert = () => {}, isConverting = false }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   // Garantir que temos um array de strings
   const safeOptions = Array.isArray(options) 
     ? options.map(opt => typeof opt === 'object' ? opt.targetFormat || '' : opt)
@@ -19,21 +23,27 @@ function ConversionOptions({ options = [], onConvert = () => {}, isConverting = 
       </Typography>
       
       {safeOptions.length > 0 ? (
-        <Grid container spacing={2}>
+        <Grid container spacing={isMobile ? 1 : 2}>
           {safeOptions
             .filter(format => format) 
             .map((format, index) => ( 
-              <Grid item key={format || `option-${index}`}>
+              <Grid item key={format || `option-${index}`} xs={isMobile ? 6 : 'auto'}>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={() => onConvert(format)}
-                  
                   disabled={isConverting}
                   startIcon={isConverting ? <CircularProgress size={20} /> : null}
                   sx={{
-                    minWidth: 180,
-                    textTransform: 'none'
+                    minWidth: isMobile ? 0 : 180,
+                    width: isMobile ? '100%' : 'auto',
+                    px: isMobile ? 1 : 3,
+                    py: isMobile ? 1 : 1.5,
+                    fontSize: isMobile ? '0.75rem' : '0.875rem',
+                    textTransform: 'none',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
                   }}
                 >
                   {format?.toUpperCase?.() || ''}

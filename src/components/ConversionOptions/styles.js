@@ -20,10 +20,22 @@ export const ConversionOptionsContainer = styled.div`
   }
 `;
 
+export const OptionsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+`;
+
 export const ConversionButton = styled(Button)`
   && {
     min-width: 140px;
-    padding: 10px 24px;
+    padding: 10px 16px;
     text-transform: none;
     font-weight: 600;
     letter-spacing: 0.3px;
@@ -34,8 +46,10 @@ export const ConversionButton = styled(Button)`
     box-shadow: 0 4px 12px rgba(0, 107, 255, 0.25);
     
     @media (max-width: 768px) {
-      min-width: 100%;
-      margin-bottom: 0.5rem;
+      min-width: unset;
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 0.8rem;
     }
     
     &:hover {
