@@ -55,7 +55,7 @@ function App() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('http://localhost:8095/api/get-conversion-options', {
+      const response = await fetch('https://file-converter-1-i6jk.onrender.com/api/get-conversion-options', {
         method: 'POST',
         body: formData
       });
@@ -82,7 +82,7 @@ function App() {
       formData.append('file', selectedFile);
       formData.append('targetFormat', targetFormat);
 
-      const response = await fetch('http://localhost:8095/api/convert', {
+      const response = await fetch('https://file-converter-1-i6jk.onrender.com/api/convert', {
         method: 'POST',
         body: formData,
       });
