@@ -5,7 +5,7 @@ import FileUpload from '../src/components/FileUpload/FileUpload';
 import ConversionOptions from '../src/components/ConversionOptions/ConversionOptions';
 import FileInfo from '../src/components/FileInfo/FileInfo';
 import { GlobalStyle } from './styles/global';
-import { AppContainer, Title, DownloadSection, DownloadLink, ResetButton, FilePreview, PreviewContent } from './App.styles';
+import { AppContainer, Title, DownloadSection, DownloadLink, ResetButton, FilePreview, PreviewContent, PreviewHeader, PreviewButton, PreviewButtons } from './App.styles';
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -16,6 +16,7 @@ function App() {
   const [success, setSuccess] = useState(null);
   const [targetFormat, setTargetFormat] = useState(null);
   const [filePreview, setFilePreview] = useState('');
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handleFileSelect = async (file) => {
     setIsLoading(true);
@@ -143,10 +144,33 @@ function App() {
               file={selectedFile}
               onReset={handleReset}
             />
-             {filePreview && (
+            {filePreview && (
               <FilePreview>
-                <h3>Pré-visualização do Arquivo:</h3>
-                <PreviewContent>
+                <PreviewHeader>
+                  <h3>Pré-visualização do Arquivo:</h3>
+                  <PreviewButtons>
+                    {isPreviewOpen ? (
+                      <PreviewButton 
+                        variant="contained" 
+                        color="error" 
+                        size="small"
+                        onClick={() => setIsPreviewOpen(false)}
+                      >
+                        Fechar
+                      </PreviewButton>
+                    ) : (
+                      <PreviewButton 
+                        variant="contained" 
+                        color="primary" 
+                        size="small"
+                        onClick={() => setIsPreviewOpen(true)}
+                      >
+                        Abrir
+                      </PreviewButton>
+                    )}
+                  </PreviewButtons>
+                </PreviewHeader>
+                <PreviewContent isOpen={isPreviewOpen}>
                   {filePreview}
                 </PreviewContent>
               </FilePreview>

@@ -119,7 +119,6 @@ export const ResetButton = styled(Button)`
     }
   }
 `;
-
 export const FilePreview = styled.div`
   margin: 2rem 0;
   padding: 1.5rem;
@@ -142,22 +141,44 @@ export const FilePreview = styled.div`
   }
 `;
 
+export const PreviewHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+export const PreviewButtons = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const PreviewButton = styled(Button)`
+  && {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    min-width: 80px;
+  }
+`;
+
 export const PreviewContent = styled.pre`
-  max-height: 300px;
+  max-height: ${props => props.isOpen ? '300px' : '0'};
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: ${props => props.isOpen ? '1.5rem' : '0 1.5rem'};
   background-color: white;
-  border: 2px solid #e0f0ff;
+  border: ${props => props.isOpen ? '2px solid #e0f0ff' : 'none'};
   border-radius: 10px;
   white-space: pre-wrap;
   word-wrap: break-word;
   font-family: 'Fira Code', 'Courier New', monospace;
   line-height: 1.6;
   color: #3a5a8a;
-  box-shadow: inset 0 4px 12px rgba(0, 107, 255, 0.05);
+  box-shadow: ${props => props.isOpen ? 'inset 0 4px 12px rgba(0, 107, 255, 0.05)' : 'none'};
+  transition: all 0.3s ease;
+  margin: 0;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: ${props => props.isOpen ? '1rem' : '0 1rem'};
     font-size: 0.9rem;
   }
 `;
