@@ -5,7 +5,7 @@ function ConversionOptions({ options = [], onConvert = () => {}, isConverting = 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
-  // Garantir que temos um array de strings
+  
   const safeOptions = Array.isArray(options) 
     ? options.map(opt => typeof opt === 'object' ? opt.targetFormat || '' : opt)
     : [];

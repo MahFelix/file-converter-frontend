@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Alert, CircularProgress } from '@mui/material';
 import FileUpload from '../src/components/FileUpload/FileUpload';
 import ConversionOptions from '../src/components/ConversionOptions/ConversionOptions';
@@ -18,6 +19,16 @@ function App() {
   const [filePreview, setFilePreview] = useState('');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch('https://file-converter-1-i6jk.onrender.com/api/get-conversion-options')
+        .then(response => console.log('Backend pingado com sucesso'))
+        .catch(err => console.error('Erro ao pingar backend:', err));
+    }, 300000); // 5 minutos
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleFileSelect = async (file) => {
     setIsLoading(true);
     setError(null);
@@ -25,10 +36,10 @@ function App() {
     setFilePreview('');
 
     try {
-      // Tenta fazer pré-visualização para diferentes tipos de arquivos
+      
       const reader = new FileReader();
       
-      // Arquivos de texto (TXT, CSV, etc)
+  
       if (file.type.includes('text/') || 
           ['.txt', '.csv', '.html', '.xml', '.json', '.js', '.css'].some(ext => file.name.endsWith(ext))) {
         reader.onload = (e) => {
@@ -36,11 +47,11 @@ function App() {
         };
         reader.readAsText(file);
       } 
-      // Arquivos PDF (exibe mensagem)
+ 
       else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
         setFilePreview("Pré-visualização de PDF não disponível - Arquivo PDF carregado");
       }
-      // Documentos do Office (exibe mensagem)
+     
       else if ([
         '.doc', '.docx', '.odt', '.rtf', 
         '.xls', '.xlsx', '.ods', 
@@ -48,7 +59,7 @@ function App() {
       ].some(ext => file.name.endsWith(ext))) {
         setFilePreview("Pré-visualização de documentos do Office não disponível - Arquivo carregado");
       }
-      // Outros tipos (mensagem genérica)
+    
       else {
         setFilePreview("Pré-visualização não disponível para este tipo de arquivo");
       }
@@ -189,7 +200,7 @@ function App() {
                 <DownloadLink
                   href={downloadUrl}
                   download={
-                    selectedFile.name.replace(/\.[^/.]+$/, "") + // Remove a extensão original
+                    selectedFile.name.replace(/\.[^/.]+$/, "") + 
                     "_converted." +
                     targetFormat
                   }
