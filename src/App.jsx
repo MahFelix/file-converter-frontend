@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Alert, CircularProgress } from '@mui/material';
 import FileUpload from '../src/components/FileUpload/FileUpload';
 import ConversionOptions from '../src/components/ConversionOptions/ConversionOptions';
@@ -34,18 +34,18 @@ function App() {
     setError(null);
     setSuccess(null);
     setFilePreview('');
-  
+
     try {
       const reader = new FileReader();
-      
+
       // Verifica se é um arquivo de texto ou código
-      if (file.type.includes('text/') || 
-          ['.txt', '.csv', '.html', '.xml', '.json', '.js', '.css'].some(ext => file.name.endsWith(ext))) {
+      if (file.type.includes('text/') ||
+        ['.txt', '.csv', '.html', '.xml', '.json', '.js', '.css'].some(ext => file.name.endsWith(ext))) {
         reader.onload = (e) => {
           setFilePreview(e.target.result);
         };
         reader.readAsText(file);
-      } 
+      }
       // Verifica se é PDF
       else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
         // Cria uma URL temporária para visualização do PDF
@@ -59,8 +59,8 @@ function App() {
       }
       // Verifica arquivos do Office
       else if ([
-        '.doc', '.docx', '.odt', '.rtf', 
-        '.xls', '.xlsx', '.ods', 
+        '.doc', '.docx', '.odt', '.rtf',
+        '.xls', '.xlsx', '.ods',
         '.ppt', '.pptx', '.odp'
       ].some(ext => file.name.endsWith(ext))) {
         // Usa o visualizador do Office Online
@@ -78,17 +78,17 @@ function App() {
       else {
         setFilePreview("Pré-visualização não disponível para este tipo de arquivo");
       }
-  
+
       const formData = new FormData();
       formData.append('file', file);
-  
+
       const response = await fetch('https://file-converter-1-i6jk.onrender.com/api/get-conversion-options', {
         method: 'POST',
         body: formData
       });
-  
+
       if (!response.ok) throw new Error('Falha ao obter opções de conversão');
-  
+
       const options = await response.json();
       setConversionOptions(options);
       setSelectedFile(file);
@@ -99,6 +99,8 @@ function App() {
       setIsLoading(false);
     }
   };
+
+
   const handleConvert = async (targetFormat) => {
     setIsLoading(true);
     setError(null);
@@ -176,18 +178,18 @@ function App() {
                   <h3>Pré-visualização do Arquivo:</h3>
                   <PreviewButtons>
                     {isPreviewOpen ? (
-                      <PreviewButton 
-                        variant="contained" 
-                        color="error" 
+                      <PreviewButton
+                        variant="contained"
+                        color="error"
                         size="small"
                         onClick={() => setIsPreviewOpen(false)}
                       >
                         Fechar
                       </PreviewButton>
                     ) : (
-                      <PreviewButton 
-                        variant="contained" 
-                        color="primary" 
+                      <PreviewButton
+                        variant="contained"
+                        color="primary"
                         size="small"
                         onClick={() => setIsPreviewOpen(true)}
                       >
@@ -197,7 +199,18 @@ function App() {
                   </PreviewButtons>
                 </PreviewHeader>
                 <PreviewContent isOpen={isPreviewOpen}>
-                  {filePreview}
+                  {filePreview.startsWith('http') ? (
+                    <img src={filePreview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '500px' }} />
+                  ) : (
+                    <pre style={{
+                      whiteSpace: 'pre-wrap',
+                      wordWrap: 'break-word',
+                      maxHeight: '500px',
+                      overflow: 'auto'
+                    }}>
+                      {filePreview}
+                    </pre>
+                  )}
                 </PreviewContent>
               </FilePreview>
             )}
@@ -215,7 +228,7 @@ function App() {
                 <DownloadLink
                   href={downloadUrl}
                   download={
-                    selectedFile.name.replace(/\.[^/.]+$/, "") + 
+                    selectedFile.name.replace(/\.[^/.]+$/, "") +
                     "_converted." +
                     targetFormat
                   }
