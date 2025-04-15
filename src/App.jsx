@@ -34,50 +34,40 @@ function App() {
     setError(null);
     setSuccess(null);
     setFilePreview('');
-
+  
     try {
       const reader = new FileReader();
-
-      // Verifica se é um arquivo de texto ou código
-      if (file.type.includes('text/') ||
-        ['.txt', '.csv', '.html', '.xml', '.json', '.js', '.css'].some(ext => file.name.endsWith(ext))) {
+      
+      // Arquivos de texto
+      if (file.type.includes('text/') || 
+          ['.txt', '.csv', '.html', '.xml', '.json', '.js', '.css'].some(ext => file.name.endsWith(ext))) {
         reader.onload = (e) => {
           setFilePreview(e.target.result);
         };
         reader.readAsText(file);
-      }
-      // Verifica se é PDF
+      } 
+      // PDF
       else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-        // Cria uma URL temporária para visualização do PDF
-        const url = URL.createObjectURL(file);
-        setFilePreview(`<iframe src="${url}" width="100%" height="500px" style="border: none;"></iframe>`);
+        setFilePreview("Pré-visualização de PDF disponível após conversão");
       }
-      // Verifica se é imagem
+      // Imagens
       else if (file.type.includes('image/')) {
         const url = URL.createObjectURL(file);
-        setFilePreview(`<img src="${url}" alt="Preview" style="max-width: 100%; max-height: 500px;"/>`);
+        setFilePreview(url); // Armazena apenas a URL
       }
-      // Verifica arquivos do Office
+      // Arquivos do Office
       else if ([
-        '.doc', '.docx', '.odt', '.rtf',
-        '.xls', '.xlsx', '.ods',
+        '.doc', '.docx', '.odt', '.rtf', 
+        '.xls', '.xlsx', '.ods', 
         '.ppt', '.pptx', '.odp'
       ].some(ext => file.name.endsWith(ext))) {
-        // Usa o visualizador do Office Online
-        const url = URL.createObjectURL(file);
-        setFilePreview(`
-          <iframe 
-            src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}" 
-            width="100%" 
-            height="500px" 
-            style="border: none;"
-          ></iframe>
-        `);
+        setFilePreview(`Arquivo ${file.name} carregado (${(file.size/1024).toFixed(2)} KB)`);
       }
-      // Outros tipos de arquivo
+      // Outros tipos
       else {
-        setFilePreview("Pré-visualização não disponível para este tipo de arquivo");
+        setFilePreview(`Arquivo ${file.name} carregado (${(file.size/1024).toFixed(2)} KB)`);
       }
+  
 
       const formData = new FormData();
       formData.append('file', file);
