@@ -34,12 +34,11 @@ function App() {
     setError(null);
     setSuccess(null);
     setFilePreview('');
-
+  
     try {
-      
       const reader = new FileReader();
       
-  
+      // Verifica se é um arquivo de texto ou código
       if (file.type.includes('text/') || 
           ['.txt', '.csv', '.html', '.xml', '.json', '.js', '.css'].some(ext => file.name.endsWith(ext))) {
         reader.onload = (e) => {
@@ -47,33 +46,49 @@ function App() {
         };
         reader.readAsText(file);
       } 
- 
+      // Verifica se é PDF
       else if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-        setFilePreview("Pré-visualização de PDF não disponível - Arquivo PDF carregado");
+        // Cria uma URL temporária para visualização do PDF
+        const url = URL.createObjectURL(file);
+        setFilePreview(`<iframe src="${url}" width="100%" height="500px" style="border: none;"></iframe>`);
       }
-     
+      // Verifica se é imagem
+      else if (file.type.includes('image/')) {
+        const url = URL.createObjectURL(file);
+        setFilePreview(`<img src="${url}" alt="Preview" style="max-width: 100%; max-height: 500px;"/>`);
+      }
+      // Verifica arquivos do Office
       else if ([
         '.doc', '.docx', '.odt', '.rtf', 
         '.xls', '.xlsx', '.ods', 
         '.ppt', '.pptx', '.odp'
       ].some(ext => file.name.endsWith(ext))) {
-        setFilePreview("Pré-visualização de documentos do Office não disponível - Arquivo carregado");
+        // Usa o visualizador do Office Online
+        const url = URL.createObjectURL(file);
+        setFilePreview(`
+          <iframe 
+            src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}" 
+            width="100%" 
+            height="500px" 
+            style="border: none;"
+          ></iframe>
+        `);
       }
-    
+      // Outros tipos de arquivo
       else {
         setFilePreview("Pré-visualização não disponível para este tipo de arquivo");
       }
-
+  
       const formData = new FormData();
       formData.append('file', file);
-
+  
       const response = await fetch('https://file-converter-1-i6jk.onrender.com/api/get-conversion-options', {
         method: 'POST',
         body: formData
       });
-
+  
       if (!response.ok) throw new Error('Falha ao obter opções de conversão');
-
+  
       const options = await response.json();
       setConversionOptions(options);
       setSelectedFile(file);
